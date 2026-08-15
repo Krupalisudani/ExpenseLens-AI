@@ -1,0 +1,102 @@
+id,date,category,amount,description
+1,2026-01-01,Rent,572.41,Sample rent expense
+2,2026-01-03,Travel,265.84,Sample travel expense
+3,2026-01-05,Groceries,97.96,Sample groceries expense
+4,2026-01-07,Rent,800.38,Sample rent expense
+5,2026-01-07,Bills,280.57,Sample bills expense
+6,2026-01-09,Bills,508.89,Sample bills expense
+7,2026-01-11,Rent,1255.08,Sample rent expense
+8,2026-01-13,Education,104.89,Sample education expense
+9,2026-01-13,Entertainment,135.49,Sample entertainment expense
+10,2026-01-15,Food,130.75,Sample food expense
+11,2026-01-15,Transport,65.47,Sample transport expense
+13,2026-01-17,Shopping,236.48,Sample shopping expense
+12,2026-01-17,Mobile/Internet,85.67,Sample mobile/internet expense
+14,2026-01-19,Rent,789.08,Sample rent expense
+15,2026-01-19,Shopping,281.98,Sample shopping expense
+16,2026-01-21,Education,172.62,Sample education expense
+17,2026-01-23,Personal Care,68.62,Sample personal care expense
+18,2026-01-25,Entertainment,85.82,Sample entertainment expense
+19,2026-01-25,Transport,85.09,Sample transport expense
+20,2026-01-27,Milk,38.4,Sample milk expense
+21,2026-01-27,Mobile/Internet,42.69,Sample mobile/internet expense
+22,2026-01-29,Education,189.02,Sample education expense
+24,2026-02-01,Travel,257.06,Sample travel expense
+23,2026-02-01,Milk,25.49,Sample milk expense
+25,2026-02-03,Travel,233.55,Sample travel expense
+26,2026-02-03,Travel,232.53,Sample travel expense
+27,2026-02-05,Vegetables,104.81,Sample vegetables expense
+28,2026-02-07,Travel,221.11,Sample travel expense
+29,2026-02-07,Milk,47.57,Sample milk expense
+30,2026-02-09,Healthcare,47.63,Sample healthcare expense
+31,2026-02-09,Transport,63.15,Sample transport expense
+32,2026-02-11,Bills,390.4,Sample bills expense
+33,2026-02-11,Education,246.76,Sample education expense
+34,2026-02-13,Mobile/Internet,86.76,Sample mobile/internet expense
+36,2026-02-15,Education,195.24,Sample education expense
+35,2026-02-15,Education,143.01,Sample education expense
+37,2026-02-17,Groceries,248.38,Sample groceries expense
+38,2026-02-17,Education,142.23,Sample education expense
+39,2026-02-19,Entertainment,168.52,Sample entertainment expense
+40,2026-02-21,Entertainment,71.73,Sample entertainment expense
+41,2026-02-23,Vegetables,65.92,Sample vegetables expense
+42,2026-02-25,Transport,79.37,Sample transport expense
+43,2026-02-25,Entertainment,110.22,Sample entertainment expense
+44,2026-02-27,Bills,526.59,Sample bills expense
+45,2026-02-27,Rent,866.76,Sample rent expense
+46,2026-03-01,Travel,145.98,Sample travel expense
+47,2026-03-03,Food,82.31,Sample food expense
+48,2026-03-05,Mobile/Internet,66.72,Sample mobile/internet expense
+49,2026-03-05,Mobile/Internet,57.25,Sample mobile/internet expense
+50,2026-03-07,Subscriptions,49.43,Sample subscriptions expense
+51,2026-03-09,Bills,366.9,Sample bills expense
+52,2026-03-11,Vegetables,83.11,Sample vegetables expense
+53,2026-03-13,Healthcare,42.2,Sample healthcare expense
+54,2026-03-15,Shopping,154.6,Sample shopping expense
+55,2026-03-17,Shopping,162.23,Sample shopping expense
+57,2026-03-19,Vegetables,74.84,Sample vegetables expense
+56,2026-03-19,Entertainment,165.84,Sample entertainment expense
+58,2026-03-21,Mobile/Internet,38.37,Sample mobile/internet expense
+59,2026-03-23,Transport,44.39,Sample transport expense
+60,2026-03-23,Entertainment,147.53,Sample entertainment expense
+62,2026-03-25,Vegetables,92.61,Sample vegetables expense
+61,2026-03-25,Mobile/Internet,65.67,Sample mobile/internet expense
+63,2026-03-27,Milk,18.77,Sample milk expense
+64,2026-03-27,Food,77.39,Sample food expense
+66,2026-03-29,Entertainment,177.91,Sample entertainment expense
+65,2026-03-29,Healthcare,86.15,Sample healthcare expense
+67,2026-04-01,Healthcare,66.42,Sample healthcare expense
+69,2026-04-03,Milk,59.45,Sample milk expense
+68,2026-04-03,Entertainment,148.63,Sample entertainment expense
+70,2026-04-05,Healthcare,156.51,Sample healthcare expense
+71,2026-04-07,Milk,35.7,Sample milk expense
+72,2026-04-09,Transport,69.52,Sample transport expense
+73,2026-04-09,Personal Care,47.67,Sample personal care expense
+74,2026-04-11,Education,159.08,Sample education expense
+75,2026-04-11,Milk,29.65,Sample milk expense
+76,2026-04-13,Bills,594.94,Sample bills expense
+77,2026-04-13,Rent,1758.32,Sample rent expense
+79,2026-04-15,Milk,11.67,Sample milk expense
+78,2026-04-15,Bills,526.72,Sample bills expense
+80,2026-04-17,Travel,164.56,Sample travel expense
+81,2026-04-17,Transport,68.8,Sample transport expense
+83,2026-04-19,Shopping,303.3,Sample shopping expense
+82,2026-04-19,Entertainment,131.2,Sample entertainment expense
+85,2026-04-21,Milk,19.04,Sample milk expense
+84,2026-04-21,Education,109.97,Sample education expense
+86,2026-04-23,Mobile/Internet,67.7,Sample mobile/internet expense
+87,2026-04-23,Mobile/Internet,72.15,Sample mobile/internet expense
+89,2026-04-25,Groceries,121.15,Sample groceries expense
+88,2026-04-25,Transport,66.43,Sample transport expense
+90,2026-04-27,Food,85.81,Sample food expense
+92,2026-04-29,Entertainment,94.39,Sample entertainment expense
+91,2026-04-29,Shopping,204.85,Sample shopping expense
+95,2026-08-15,Travel,200.0,
+97,2026-08-15,Shopping,300.0,
+94,2026-08-15,Groceries,100.0,
+99,2026-08-15,Milk,100.0,
+93,2026-08-15,Food,200.0,
+96,2026-08-15,Healthcare,150.0,
+98,2026-08-15,Bills,60.0,
+100,2026-08-15,Groceries,150.0,
+101,2026-08-15,Education,50.0,

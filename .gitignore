@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary uploads
+data/tmp_uploads/
+
+# Personal user data
+data/user_data.json
+
+# Local generated expense data
+# Uncomment this if expenses.csv contains your personal expenses
+# data/expenses.csv

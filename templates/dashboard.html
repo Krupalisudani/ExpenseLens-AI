@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | ExpenseLens AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    {% include "_nav.html" %}
+    {% include "_flash.html" %}
+
+    <main class="page-wrapper">
+
+        <div class="page-header">
+            <div>
+                <h1>Welcome back, {{ user.name }}</h1>
+                <p class="page-sub">Here's your financial snapshot for {{ current_month_name }}.</p>
+            </div>
+            <a href="{{ url_for('expenses_page') }}" class="btn btn-primary">+ Add Expense</a>
+        </div>
+
+        {% if not has_data %}
+        <div class="card empty-state-card">
+            <p class="empty-state">No dataset uploaded yet. Start by adding your first expense, or import a CSV from the Expenses page.</p>
+        </div>
+        {% endif %}
+
+        <!-- ===================== TOP METRICS ===================== -->
+        <section class="grid grid-5">
+            <div class="stat-card card stat-income">
+                <span class="stat-label">Total Income</span>
+                <span class="stat-value">₹{{ "{:,.0f}".format(savings.income) }}</span>
+            </div>
+            <div class="stat-card card stat-expense">
+                <span class="stat-label">Total Expenses (This Month)</span>
+                <span class="stat-value">₹{{ "{:,.0f}".format(savings.expenses) }}</span>
+            </div>
+            <div class="stat-card card stat-balance">
+                <span class="stat-label">Remaining Balance</span>
+                <span class="stat-value">₹{{ "{:,.0f}".format(savings.remaining) }}</span>
+            </div>
+            <div class="stat-card card stat-savings">
+                <span class="stat-label">Savings</span>
+                <span class="stat-value">₹{{ "{:,.0f}".format(savings.remaining) }}</span>
+            </div>
+            <div class="stat-card card stat-percent">
+                <span class="stat-label">Savings Percentage</span>
+                <span class="stat-value">{{ savings.savings_pct }}%</span>
+            </div>
+        </section>
+
+        <!-- ===================== TODAY / MONTH SNAPSHOT ===================== -->
+        <section class="grid grid-3">
+            <div class="card">
+                <h3 class="card-title">Today</h3>
+                <p class="big-number">₹{{ "{:,.0f}".format(today_summary.total) }}</p>
+                <p class="card-desc">{{ today_summary.count }} transaction(s) today</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Average Daily Spending</h3>
+                <p class="big-number">₹{{ "{:,.0f}".format(month_summary.daily_average) }}</p>
+                <p class="card-desc">Based on this month so far</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Highest Spending Category</h3>
+                {% if month_summary.highest_category %}
+                <p class="big-number">{{ month_summary.highest_category.category }}</p>
+                <p class="card-desc">₹{{ "{:,.0f}".format(month_summary.highest_category.amount) }} ({{ month_summary.highest_category.percentage }}%)</p>
+                {% else %}
+                <p class="empty-state">No expenses yet this month.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- ===================== CATEGORY BREAKDOWN ===================== -->
+        <section class="grid grid-2-uneven">
+            <div class="card">
+                <h3 class="card-title">Category Breakdown (This Month)</h3>
+                {% if month_summary.categories %}
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Rank</th><th>Category</th><th>Amount</th><th>%</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for c in month_summary.categories %}
+                            <tr>
+                                <td>{{ c.rank }}</td>
+                                <td>{{ c.category }}</td>
+                                <td>₹{{ "{:,.0f}".format(c.amount) }}</td>
+                                <td>{{ c.percentage }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="empty-state">No expenses recorded this month yet.</p>
+                {% endif %}
+            </div>
+            <div class="card">
+                <h3 class="card-title">Where Did My Money Go?</h3>
+                {% if month_summary.categories %}
+                <canvas id="categoryPieChart" height="240"></canvas>
+                {% else %}
+                <p class="empty-state">Add expenses to see this chart.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- ===================== INSIGHTS PREVIEW ===================== -->
+        <section class="card highlight-card">
+            <h3 class="card-title">Spending Insights</h3>
+            <ul class="insights-list">
+                {% for insight in insights %}
+                <li>{{ insight }}</li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for('analytics_page') }}" class="btn btn-secondary">View Full Analytics</a>
+        </section>
+
+        <!-- ===================== UPDATE INCOME ===================== -->
+        <section class="card">
+            <h3 class="card-title">Update Income &amp; Savings Goal</h3>
+            <form action="{{ url_for('update_settings') }}" method="POST" class="inline-form">
+                <input type="hidden" name="name" value="{{ user.name }}">
+                <div class="form-group">
+                    <label class="form-label" for="monthly_income">Monthly Income (₹)</label>
+                    <input type="number" id="monthly_income" name="monthly_income" class="text-input" value="{{ savings.income }}" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="savings_goal">Savings Goal (₹)</label>
+                    <input type="number" id="savings_goal" name="savings_goal" class="text-input" value="{{ savings.savings_goal }}" min="0" step="0.01">
+                </div>
+                <button type="submit" class="btn btn-secondary">Update</button>
+            </form>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span>ExpenseLens AI &mdash; Understand your spending. Make smarter financial decisions.</span>
+        </div>
+    </footer>
+
+    {% if month_summary.categories %}
+    <script>
+        window.__CATEGORY_DATA__ = {{ month_summary.categories | tojson }};
+    </script>
+    {% endif %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

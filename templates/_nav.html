@@ -1,0 +1,14 @@
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('dashboard') }}" class="brand">
+            <span class="brand-mark">EL</span>
+            <span class="brand-text">ExpenseLens <strong>AI</strong></span>
+        </a>
+        <div class="navlinks">
+            <a href="{{ url_for('dashboard') }}" class="navlink {{ 'active' if request.endpoint == 'dashboard' else '' }}">Dashboard</a>
+            <a href="{{ url_for('expenses_page') }}" class="navlink {{ 'active' if request.endpoint == 'expenses_page' else '' }}">Expenses</a>
+            <a href="{{ url_for('analytics_page') }}" class="navlink {{ 'active' if request.endpoint == 'analytics_page' else '' }}">Analytics</a>
+            <a href="{{ url_for('index') }}" class="navlink {{ 'active' if request.endpoint == 'index' else '' }}">Setup</a>
+        </div>
+    </div>
+</nav>

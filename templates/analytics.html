@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics | ExpenseLens AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    {% include "_nav.html" %}
+    {% include "_flash.html" %}
+
+    <main class="page-wrapper">
+
+        <div class="page-header">
+            <div>
+                <h1>Analytics &amp; AI Insights</h1>
+                <p class="page-sub">Deeper analysis of your spending patterns and a data-driven forecast.</p>
+            </div>
+        </div>
+
+        {% if not has_data %}
+        <div class="card empty-state-card">
+            <p class="empty-state">No dataset uploaded yet. Add some expenses first to unlock analytics.</p>
+        </div>
+        {% endif %}
+
+        <!-- ===================== VIEW SWITCH ===================== -->
+        <section class="card">
+            <div class="view-switch">
+                <a href="{{ url_for('analytics_page', view='monthly', year=year, month=month) }}"
+                   class="btn {{ 'btn-secondary' if view == 'monthly' else 'btn-ghost' }}">Monthly View</a>
+                <a href="{{ url_for('analytics_page', view='yearly', year=year, month=month) }}"
+                   class="btn {{ 'btn-secondary' if view == 'yearly' else 'btn-ghost' }}">Yearly View</a>
+
+                <form action="{{ url_for('analytics_page') }}" method="GET" class="inline-form period-form">
+                    <input type="hidden" name="view" value="{{ view }}">
+                    <select name="month" class="select-input">
+                        {% for i in range(1, 13) %}
+                        <option value="{{ i }}" {{ "selected" if i == month else "" }}>{{ month_names[i-1] }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="number" name="year" class="text-input year-input" value="{{ year }}" min="2000" max="2100">
+                    <button type="submit" class="btn btn-ghost">Go</button>
+                </form>
+            </div>
+        </section>
+
+        {% if view == 'monthly' and month_summary %}
+        <!-- ===================== MONTHLY VIEW ===================== -->
+        <section class="grid grid-3">
+            <div class="card">
+                <h3 class="card-title">Total Spending</h3>
+                <p class="big-number">₹{{ "{:,.0f}".format(month_summary.total) }}</p>
+                <p class="card-desc">{{ month_names[month-1] }} {{ year }}</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Transactions</h3>
+                <p class="big-number">{{ month_summary.transaction_count }}</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Daily Average</h3>
+                <p class="big-number">₹{{ "{:,.0f}".format(month_summary.daily_average) }}</p>
+            </div>
+        </section>
+
+        <section class="grid grid-2-uneven">
+            <div class="card">
+                <h3 class="card-title">Category Breakdown</h3>
+                {% if month_summary.categories %}
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead><tr><th>Rank</th><th>Category</th><th>Amount</th><th>%</th></tr></thead>
+                        <tbody>
+                            {% for c in month_summary.categories %}
+                            <tr><td>{{ c.rank }}</td><td>{{ c.category }}</td><td>₹{{ "{:,.0f}".format(c.amount) }}</td><td>{{ c.percentage }}%</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="empty-state">No expenses recorded for this month.</p>
+                {% endif %}
+            </div>
+            <div class="card">
+                <h3 class="card-title">Category Comparison</h3>
+                {% if month_summary.categories %}
+                <canvas id="categoryBarChart" height="240"></canvas>
+                {% else %}
+                <p class="empty-state">No data to chart yet.</p>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if view == 'yearly' and year_summary %}
+        <!-- ===================== YEARLY VIEW ===================== -->
+        <section class="grid grid-3">
+            <div class="card">
+                <h3 class="card-title">Total Yearly Spending</h3>
+                <p class="big-number">₹{{ "{:,.0f}".format(year_summary.total) }}</p>
+                <p class="card-desc">{{ year }}</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Highest Spending Month</h3>
+                {% if year_summary.highest_month %}
+                <p class="big-number">{{ month_names[year_summary.highest_month.month - 1] }}</p>
+                <p class="card-desc">₹{{ "{:,.0f}".format(year_summary.highest_month.total) }}</p>
+                {% else %}<p class="empty-state">No data yet.</p>{% endif %}
+            </div>
+            <div class="card">
+                <h3 class="card-title">Lowest Spending Month</h3>
+                {% if year_summary.lowest_month %}
+                <p class="big-number">{{ month_names[year_summary.lowest_month.month - 1] }}</p>
+                <p class="card-desc">₹{{ "{:,.0f}".format(year_summary.lowest_month.total) }}</p>
+                {% else %}<p class="empty-state">No data yet.</p>{% endif %}
+            </div>
+        </section>
+
+        <section class="card">
+            <h3 class="card-title">Is My Spending Increasing? (Monthly Trend)</h3>
+            <canvas id="yearlyTrendChart" height="100"></canvas>
+        </section>
+        {% endif %}
+
+        <!-- ===================== MONTH COMPARISON ===================== -->
+        <section class="card">
+            <h3 class="card-title">Compare Two Months</h3>
+            <form action="{{ url_for('analytics_page') }}" method="GET" class="inline-form compare-form">
+                <input type="hidden" name="view" value="{{ view }}">
+                <input type="hidden" name="year" value="{{ year }}">
+                <input type="hidden" name="month" value="{{ month }}">
+
+                <select name="c_month1" class="select-input">
+                    {% for i in range(1, 13) %}<option value="{{ i }}">{{ month_names[i-1] }}</option>{% endfor %}
+                </select>
+                <input type="number" name="c_year1" class="text-input year-input" value="{{ year }}" min="2000" max="2100">
+                <span class="vs-label">vs</span>
+                <select name="c_month2" class="select-input">
+                    {% for i in range(1, 13) %}<option value="{{ i }}">{{ month_names[i-1] }}</option>{% endfor %}
+                </select>
+                <input type="number" name="c_year2" class="text-input year-input" value="{{ year }}" min="2000" max="2100">
+                <button type="submit" class="btn btn-secondary">Compare</button>
+            </form>
+
+            {% if comparison %}
+            <div class="comparison-result">
+                <div class="comparison-totals">
+                    <div><span class="comparison-label">{{ month_names[comparison.month1.month - 1] }} {{ comparison.month1.year }}</span><span class="comparison-amount">₹{{ "{:,.0f}".format(comparison.month1.total) }}</span></div>
+                    <div><span class="comparison-label">{{ month_names[comparison.month2.month - 1] }} {{ comparison.month2.year }}</span><span class="comparison-amount">₹{{ "{:,.0f}".format(comparison.month2.total) }}</span></div>
+                </div>
+                <p class="comparison-headline {{ 'text-danger' if comparison.increase > 0 else 'text-success' }}">
+                    {{ "Increase" if comparison.increase > 0 else "Decrease" }}: ₹{{ "{:,.0f}".format(comparison.increase|abs) }} ({{ comparison.percentage|abs }}%)
+                </p>
+                {% if comparison.category_deltas %}
+                <h4 class="mini-heading">Biggest Category Changes</h4>
+                <ul class="delta-list">
+                    {% for d in comparison.category_deltas %}
+                    <li class="{{ 'text-danger' if d.delta > 0 else 'text-success' }}">
+                        {{ d.category }} {{ "increased" if d.delta > 0 else "decreased" }} by ₹{{ "{:,.0f}".format(d.delta|abs) }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- ===================== ESSENTIAL VS NON-ESSENTIAL ===================== -->
+        <section class="grid grid-2-uneven">
+            <div class="card">
+                <h3 class="card-title">Essential vs Non-Essential Spending</h3>
+                <div class="essential-bars">
+                    <div class="essential-row">
+                        <span>Essential</span>
+                        <div class="progress-track"><div class="progress-fill progress-green" style="width: {{ essential_split.essential_pct }}%;"></div></div>
+                        <span>{{ essential_split.essential_pct }}%</span>
+                    </div>
+                    <div class="essential-row">
+                        <span>Non-Essential</span>
+                        <div class="progress-track"><div class="progress-fill progress-purple" style="width: {{ essential_split.non_essential_pct }}%;"></div></div>
+                        <span>{{ essential_split.non_essential_pct }}%</span>
+                    </div>
+                </div>
+                <p class="card-desc">Essential: ₹{{ "{:,.0f}".format(essential_split.essential) }} &middot; Non-Essential: ₹{{ "{:,.0f}".format(essential_split.non_essential) }}</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Reclassify a Category</h3>
+                <p class="card-desc">Adjust which categories count as essential for your own situation.</p>
+                <form action="{{ url_for('classify_category_route') }}" method="POST" class="inline-form">
+                    <select name="category" class="select-input">
+                        {% for cat in categories %}
+                        <option value="{{ cat }}" {{ "selected" if cat in classification_map else "" }}>{{ cat }} ({{ classification_map.get(cat, "Non-Essential") }})</option>
+                        {% endfor %}
+                    </select>
+                    <select name="classification" class="select-input">
+                        <option value="Essential">Essential</option>
+                        <option value="Non-Essential">Non-Essential</option>
+                    </select>
+                    <button type="submit" class="btn btn-ghost">Save</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ===================== INSIGHTS & SUGGESTIONS ===================== -->
+        <section class="grid grid-2-uneven">
+            <div class="card">
+                <h3 class="card-title">Spending Insights</h3>
+                <ul class="insights-list">
+                    {% for insight in insights %}
+                    <li>{{ insight }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Potential Savings</h3>
+                {% if suggestions %}
+                <ul class="insights-list">
+                    {% for s in suggestions %}
+                    <li>{{ s.message }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="empty-state">No unusual spending detected this month.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- ===================== AI SPENDING PREDICTION ===================== -->
+        <section class="card highlight-card">
+            <h3 class="card-title">AI Spending Prediction</h3>
+            <p class="card-desc">
+                The prediction uses historical spending patterns (previous month's total,
+                number of transactions, and the overall time trend) to estimate next
+                month's spending. It does not use any generative AI or language model.
+            </p>
+
+            {% if prediction.available %}
+            <div class="prediction-headline">
+                <span class="stat-label">Estimated Next Month Spending</span>
+                <span class="big-number">₹{{ "{:,.0f}".format(prediction.average_estimate) }}</span>
+            </div>
+
+            <div class="table-scroll">
+                <table class="data-table">
+                    <thead><tr><th>Model</th><th>Prediction</th><th>MAE</th><th>R²</th></tr></thead>
+                    <tbody>
+                        {% for r in prediction.model_results %}
+                        <tr class="{{ 'best-model-row' if r.model == prediction.best_model else '' }}">
+                            <td>{{ r.model }}{{ " (best fit)" if r.model == prediction.best_model else "" }}</td>
+                            <td>₹{{ "{:,.0f}".format(r.prediction) }}</td>
+                            <td>{{ r.mae }}</td>
+                            <td>{{ r.r2 if r.r2 is not none else "N/A" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if prediction.feature_importance %}
+            <h4 class="mini-heading">Factors Influencing the Estimate</h4>
+            <canvas id="featureImportanceChart" height="150"></canvas>
+            {% endif %}
+
+            <p class="prediction-note">{{ prediction.note }}</p>
+            {% else %}
+            <p class="empty-state">{{ prediction.message }}</p>
+            {% endif %}
+        </section>
+
+    </main>
+
+    <script>
+        window.__MONTH_SUMMARY__ = {{ (month_summary.categories if month_summary else []) | tojson }};
+        window.__YEAR_SUMMARY__ = {{ (year_summary.monthly_totals if year_summary else []) | tojson }};
+        window.__MONTH_NAMES__ = {{ month_names | tojson }};
+        window.__FEATURE_IMPORTANCE__ = {{ (prediction.feature_importance if prediction.available else []) | tojson }};
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

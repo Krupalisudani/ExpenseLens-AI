@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseLens AI | Setup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="page-setup">
+
+    {% include "_nav.html" %}
+    {% include "_flash.html" %}
+
+    <main class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge">EXPENSE TRACKING + DATA ANALYSIS + AI-ASSISTED INSIGHTS</div>
+            <h1 class="hero-title">ExpenseLens AI</h1>
+            <p class="hero-tagline">Understand your spending. Make smarter financial decisions.</p>
+            <p class="hero-desc">
+                Record your everyday expenses and ExpenseLens AI turns them into clear,
+                understandable insights: where your money goes, how your spending is
+                trending, and a data-driven estimate of what next month might look like.
+            </p>
+
+            <form class="card setup-card" action="{{ url_for('setup') }}" method="POST">
+                <h3 class="card-title">Your Profile</h3>
+                <p class="card-desc">This information is used to calculate your savings and personalize your insights.</p>
+
+                <label class="form-label" for="name">Name</label>
+                <input type="text" id="name" name="name" class="text-input" value="{{ user.name }}" maxlength="40" required>
+
+                <label class="form-label" for="monthly_income">Monthly Income (₹)</label>
+                <input type="number" id="monthly_income" name="monthly_income" class="text-input" value="{{ user.monthly_income }}" min="0" step="0.01" required>
+
+                <label class="form-label" for="savings_goal">Savings Goal (₹, optional)</label>
+                <input type="number" id="savings_goal" name="savings_goal" class="text-input" value="{{ user.savings_goal }}" min="0" step="0.01">
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    {{ "Update Profile" if user.setup_complete else "Get Started" }}
+                </button>
+
+                {% if user.setup_complete %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-ghost btn-block">Go to Dashboard</a>
+                {% endif %}
+            </form>
+        </div>
+    </main>
+
+    <section class="features">
+        <div class="features-inner">
+            <h2 class="section-title">What ExpenseLens AI Does</h2>
+            <div class="feature-grid">
+                <div class="feature-card card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Easy Expense Entry</h3>
+                    <p>Log daily expenses in seconds with predefined categories or your own custom ones.</p>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Category Analysis</h3>
+                    <p>See exactly how much you spend per category, ranked and shown as a percentage of your total.</p>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Spending Trends</h3>
+                    <p>Compare months, spot increases, and understand your essential vs. non-essential spending.</p>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Spending Estimate</h3>
+                    <p>A simple regression model estimates next month's spending from your own history.</p>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Smart Insights</h3>
+                    <p>Plain-language, data-backed observations about where your money is going.</p>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Potential Savings</h3>
+                    <p>Get concrete, calculated suggestions for categories where you could realistically cut back.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span>ExpenseLens AI &mdash; Understand your spending. Make smarter financial decisions.</span>
+            <span class="footer-note">Built with Python, Flask, Pandas &amp; Scikit-learn</span>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
