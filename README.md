@@ -1,75 +1,51 @@
 # ExpenseLens AI
 
-> **Understand your expenses. Discover where your money goes. Make smarter financial decisions.**
+ExpenseLens AI is a personal expense tracking and financial insights tool built with Python, Flask, Pandas, NumPy, and Scikit-learn.
 
-ExpenseLens AI is a Python-based expense tracking and financial insights tool that helps users record, analyze, and understand their daily expenses.
+It helps users record their daily expenses, understand their spending patterns, compare monthly expenses, track savings, and estimate future spending using basic machine learning.
 
-It combines **Pandas, NumPy, and Scikit-learn** to analyze spending patterns and estimate future monthly expenses using basic machine learning.
-
----
-
-## 🚀 Features
+## Features
 
 - Add, edit, and delete daily expenses
-- Organize expenses by customizable categories
-- Track income, expenses, balance, and savings
-- View daily, monthly, and yearly spending
-- Compare spending across different months
-- Analyze essential vs. non-essential expenses
-- View interactive spending charts and trends
-- Get data-based spending insights and savings suggestions
-- Predict next month's spending using Machine Learning
-- Use the application through both **Web Browser and Terminal**
+- Custom expense categories
+- Track income, expenses, balance, and savings percentage
+- Category-wise and monthly expense analysis
+- Monthly and yearly spending trends
+- Compare expenses between different months
+- Essential vs. non-essential expense analysis
+- Data-based spending insights and saving suggestions
+- AI-based next-month spending estimation
+- Browser dashboard with interactive charts
+- Terminal interface with Matplotlib graphs
+- CSV-based storage without a database
 
----
+## Machine Learning
 
-## 🤖 Machine Learning
+The project uses Scikit-learn to estimate next month's total spending from the user's previous monthly expense history.
 
-ExpenseLens AI uses three Scikit-learn regression models:
+Models used:
 
 - Linear Regression
-- Decision Tree
-- Random Forest
+- Decision Tree Regression
+- Random Forest Regression
 
-The models use the user's previous monthly spending data to estimate future spending.
+The system also provides basic evaluation metrics and feature importance to make the prediction understandable.
 
-The project also provides basic model evaluation and feature-importance information to make the prediction easier to understand.
+## Technology Stack
 
-> Predictions are estimates based on historical data and are not financial advice.
+- Python
+- Flask
+- Pandas
+- NumPy
+- Scikit-learn
+- Matplotlib
+- HTML5
+- CSS3
+- JavaScript
+- Chart.js
+- CSV and JSON
 
----
-
-## 📊 Useful Visualizations
-
-The application provides graphs that help users understand:
-
-- Where their money goes
-- Monthly spending trends
-- Income vs. expenses
-- Spending by category
-- Factors influencing the ML prediction
-
----
-
-## 🛠️ Tech Stack
-
-**Programming:** Python
-
-**Data Analysis:** Pandas, NumPy
-
-**Machine Learning:** Scikit-learn
-
-**Backend:** Flask
-
-**Frontend:** HTML, CSS, JavaScript
-
-**Visualization:** Matplotlib, Chart.js
-
-**Storage:** CSV and JSON
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```text
 ExpenseLensAI/
